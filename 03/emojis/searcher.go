@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"slices"
 	"sort"
 	"strings"
@@ -19,6 +20,10 @@ type searcher struct {
 
 func (s *searcher) Search(_ context.Context, query string) ([]string, error) {
 	lcQueryWords := strings.Fields(strings.ToLower(query))
+
+	if len(lcQueryWords) == 0 {
+		return []string{}, errors.New("Query must contain at least one word")
+	}
 
 	results := make([]string, 0)
 

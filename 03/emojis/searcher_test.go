@@ -52,3 +52,33 @@ func TestBlackCat(t *testing.T) {
 		}
 	})
 }
+
+func TestNoResults(t *testing.T) {
+	runner := weavertest.Local
+	runner.Test(t, func(t *testing.T, searcher Searcher) {
+		ctx := context.Background()
+		results, err := searcher.Search(ctx, "foo bar baz")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if len(results) > 0 {
+			t.Fail()
+		}
+	})
+}
+
+func TestEmptyQuery(t *testing.T) {
+	runner := weavertest.Local
+	runner.Test(t, func(t *testing.T, searcher Searcher) {
+		ctx := context.Background()
+		results, err := searcher.Search(ctx, "")
+		if err == nil {
+			t.Fatal(err)
+		}
+
+		if len(results) > 0 {
+			t.Fail()
+		}
+	})
+}
